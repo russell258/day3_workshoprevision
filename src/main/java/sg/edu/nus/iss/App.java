@@ -12,9 +12,11 @@ public class App
         Scanner scan = new Scanner(System.in);
         String input = "";
         String secondInputName = "";
+        String addInput = "";
         int secondInt = 0;
         String[] addList = null;
         boolean isLoggedIn = false;
+        List<String> shoppingCart = new ArrayList<String>();
         
         // if no args specified, use default directory db
         if (args.length >0){
@@ -38,11 +40,11 @@ public class App
             input = scan.next();
 
             if (input.equals("login")){
-                secondInputName = directoryName + File.separator+ scan.nextLine().trim();
+                secondInputName = scan.nextLine().trim();
                 if (secondInputName.isEmpty()){
                     System.out.println("Please include your login username");
                 }else{
-                    ShoppingCartDB.login(secondInputName);
+                    ShoppingCartDB.login(directoryName, secondInputName);
                     isLoggedIn = true;
                 }
             }
@@ -58,6 +60,16 @@ public class App
 
             if (input.equals("users")){
                 ShoppingCartDB.users(directoryFile);
+            }
+
+            if (input.equals("add")){
+                addInput = scan.nextLine().trim().toLowerCase();
+                if (!addInput.isEmpty()){
+                    ShoppingCartDB.add(addInput);
+                }else{
+                    System.out.println("Please add something");
+                }
+
             }
 
         }

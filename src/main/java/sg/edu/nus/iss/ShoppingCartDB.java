@@ -4,13 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShoppingCartDB {
-    
     // login
     //detect if file exists, otherwise create user file
-    public static void login (String secondInputName) throws IOException{
-        File user = new File(secondInputName);
+    public static void login (String directoryName, String secondInputName) throws IOException{
+        File user = new File(directoryName+ File.separator+secondInputName);
         if (user.createNewFile()){
             System.out.println(secondInputName + ", your cart is empty");
             }else if (user.length()==0){
@@ -55,6 +56,18 @@ public class ShoppingCartDB {
             }
     }
 
+    public static void add(String addInput){
+        String[] addList = addInput.split("[ ,]+");
 
+        for (String addItem: addList){
+            if (shoppingCart.contains(addItem)){
+                System.out.println("You have "+ addItem + " in your cart");
+            }else{
+                shoppingCart.add(addItem);
+                System.out.println(addItem + " added to your cart");
+            }
+        }
+    }
+    
 
 }
