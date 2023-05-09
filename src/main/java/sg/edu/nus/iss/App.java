@@ -2,6 +2,7 @@ package sg.edu.nus.iss;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App 
@@ -13,10 +14,9 @@ public class App
         String input = "";
         String secondInputName = "";
         String addInput = "";
-        int secondInt = 0;
-        String[] addList = null;
+        String deleteInput = "";
         boolean isLoggedIn = false;
-        List<String> shoppingCart = new ArrayList<String>();
+        ArrayList<String> shoppingCart = new ArrayList<String>();
         
         // if no args specified, use default directory db
         if (args.length >0){
@@ -44,43 +44,51 @@ public class App
                 if (secondInputName.isEmpty()){
                     System.out.println("Please include your login username");
                 }else{
-                    ShoppingCartDB.login(directoryName, secondInputName);
+                    ShoppingCartDB.login(directoryName, secondInputName, shoppingCart);
                     isLoggedIn = true;
                 }
             }
 
             if (input.equals("list")){
                 if (isLoggedIn){
-                    ShoppingCartDB.list(secondInputName);  
+                    ShoppingCartDB.list(secondInputName, shoppingCart);  
                 }else{
                     System.out.println("Please log in first");
                 }
               
             }
-
+            // users
+            // list all the files in the directory
             if (input.equals("users")){
                 ShoppingCartDB.users(directoryFile);
             }
 
             if (input.equals("add")){
                 addInput = scan.nextLine().trim().toLowerCase();
-                if (!addInput.isEmpty()){
-                    ShoppingCartDB.add(addInput);
+                if (!addInput.isEmpty() && isLoggedIn){
+                    ShoppingCartDB.add(addInput, shoppingCart);
                 }else{
-                    System.out.println("Please add something");
+                    System.out.println("Please ensure you are logged in or you are adding something");
                 }
+            }
 
+            if (input.equals("delete") && isLoggedIn){
+                deleteInput = scan.nextLine();
+                ShoppingCartDB.delete(deleteInput, shoppingCart);
+            }
+            
+            // save
+            // write from current arraylist into the user file and flush
+            if (input.equals("save")){
+                if (!isLoggedIn){
+                    System.out.println("Please log in first");
+                }else{
+                    ShoppingCartDB.save(directoryName, secondInputName, shoppingCart);
+                }
             }
 
         }
 
-
-
-        // save
-        // write from current arraylist into the user file and flush
-
-        // users
-        // list all the files in the directory
         scan.close();
     }
 }
